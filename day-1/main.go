@@ -1,8 +1,10 @@
 package main
 
 import (
+	"fmt"
 	"log"
 	"os"
+	"sort"
 	"strconv"
 	"strings"
 )
@@ -15,8 +17,9 @@ func main() {
 
 	// craete vars and type out
 	content := strings.Split(string(raw), "\n")
-	left := make([]int, len(content))
-	right := make([]int, len(content))
+	arrSize := len(content)
+	left := make([]int, arrSize)
+	right := make([]int, arrSize)
 
 	for idx, line := range content {
 		if line == "" {
@@ -34,7 +37,25 @@ func main() {
 		if err != nil {
 			log.Fatal(err)
 		}
-
-		// sort
 	}
+
+	// sort
+	sort.Ints(left)
+	sort.Ints(right)
+
+	// get and sum the diffs
+	var sums int
+	for i := 0; i < arrSize; i++ {
+		sums += getDiff(left[i], right[i])
+	}
+
+	fmt.Println(sums)
+}
+
+func getDiff(num1 int, num2 int) int {
+	diff := num1 - num2
+	if diff < 0 {
+		diff = -diff
+	}
+	return diff
 }
