@@ -66,7 +66,7 @@ func main() {
 				break
 			}
 
-			if ignoreLevel < 0 {
+			if ignoreLevel == -1 && newIgnoreLevel == 2 {
 				ignoreLevel = 0
 			} else {
 				ignoreLevel = newIgnoreLevel
