@@ -1,21 +1,14 @@
-package main
+package day1
 
 import (
 	"fmt"
 	"log"
-	"os"
 	"strconv"
 	"strings"
 )
 
-func main() {
-	raw, err := os.ReadFile("input.txt")
-	if err != nil {
-		log.Fatal(err)
-	}
-
-	// craete vars and type out
-	content := strings.Split(string(raw), "\n")
+func Day1Part2(data string) {
+	content := strings.Split(data, "\n")
 	arrSize := len(content)
 	left := make([]int, arrSize)
 	counts := make(map[int]int)
@@ -29,10 +22,12 @@ func main() {
 		// assign numbers to arrays
 		split := strings.Split(line, "   ")
 
-		left[idx], err = strconv.Atoi(split[0])
+		leftVal, err := strconv.Atoi(split[0])
 		if err != nil {
 			log.Fatal(err)
 		}
+		left[idx] = leftVal
+
 		rightVal, err := strconv.Atoi(split[1])
 		if err != nil {
 			log.Fatal(err)

@@ -1,20 +1,15 @@
-package main
+package day2
 
 import (
+	"aoc-2024/pkg/utils"
 	"fmt"
 	"log"
-	"os"
 	"strconv"
 	"strings"
 )
 
-func main() {
-	raw, err := os.ReadFile("input.txt")
-	if err != nil {
-		log.Fatal(err)
-	}
-
-	content := strings.Split(string(raw), "\n")
+func Day2Part1(data string) {
+	content := strings.Split(data, "\n")
 	passed := 0
 
 	for _, line := range content {
@@ -55,7 +50,7 @@ func main() {
 			}
 
 			// check if number range is too big
-			diff := getDiff(lastNum, currNum)
+			diff := utils.GetDiff(lastNum, currNum)
 			if diff < 1 || diff > 3 {
 				passing = false
 				break
@@ -68,12 +63,4 @@ func main() {
 	}
 
 	fmt.Println(passed)
-}
-
-func getDiff(num1 int, num2 int) int {
-	diff := num1 - num2
-	if diff < 0 {
-		diff = -diff
-	}
-	return diff
 }
