@@ -10,7 +10,7 @@ import (
 	"strings"
 )
 
-const inFileName = "input2.txt"
+const inFileName = "input.txt"
 
 func main() {
 	// read file content and split by line to []string
@@ -29,7 +29,7 @@ func main() {
 		}
 
 		// get levels as array
-		levels, err := getLevels(reportString)
+		levels, isAscending, err := getLevels(reportString)
 		if err != nil {
 			log.Fatal(err)
 		}
@@ -40,39 +40,22 @@ func main() {
 			continue
 		}
 
-		// checking if report is safe, also when a specific index is ignored
-		problemDamper := 0
-		safeDampers := 1
-		ignoreLevel := -1
-
-		for problemDamper <= safeDampers {
+		for i := -1; i < len(levels); i++ {
 			modLevels := make([]int, len(levels))
 			copy(modLevels, levels)
 
 			// create a new slice with a missing level to check
-			if ignoreLevel >= 0 {
-				modLevels = getLevelsWithIgnoredLevel(modLevels, ignoreLevel)
+			if i >= 0 {
+				modLevels = getLevelsWithIgnoredLevel(modLevels, i)
 			}
 
-			isSafe, newIgnoreLevel := isReportSafe(modLevels)
-			fmt.Printf("[%v] || %v, %v, | %v, %v | %v\n", reportIdx, problemDamper, ignoreLevel, newIgnoreLevel, isSafe, modLevels)
-
-			if ignoreLevel == 0 && !isSafe {
-				problemDamper--
-			}
+			isSafe, newIgnoreLevel := isReportSafe(modLevels, isAscending)
+			fmt.Printf("[%v] || %v, %v, | %v, %v | %v\n", reportIdx, isAscending, i, newIgnoreLevel, isSafe, modLevels)
 
 			if isSafe {
 				safeReports++
 				break
 			}
-
-			if ignoreLevel == -1 && newIgnoreLevel == 2 {
-				ignoreLevel = 0
-			} else {
-				ignoreLevel = newIgnoreLevel
-			}
-
-			problemDamper++
 		}
 	}
 
@@ -80,12 +63,9 @@ func main() {
 }
 
 // returns if safe and if not, on which level it failed
-func isReportSafe(levels []int) (bool, int) {
-	lastAscending := false
-
+func isReportSafe(levels []int, isAscending bool) (bool, int) {
 	for i := 0; i < len(levels); i++ {
-		safe, newAscending := isLevelSafe(levels, i, lastAscending)
-		lastAscending = newAscending
+		safe := isLevelSafe(levels, i, isAscending)
 
 		if !safe {
 			return false, i
@@ -95,46 +75,55 @@ func isReportSafe(levels []int) (bool, int) {
 	return true, -1
 }
 
-func isLevelSafe(levels []int, level int, ascending bool) (bool, bool) {
+func isLevelSafe(levels []int, level int, isAscending bool) bool {
 	if level == 0 {
-		return true, ascending
+		return true
 	}
 
 	prevLevel := levels[level-1]
 	currLevel := levels[level]
 	levelDiff := getDiff(prevLevel, currLevel)
-	stillAscending := prevLevel < currLevel
+	isCurrAscending := prevLevel < currLevel == isAscending
 
 	// check for out of range
 	if levelDiff < 1 || levelDiff > 3 {
-		return false, stillAscending
+		return false
 	}
 
 	// check if ascending/decending order is still the same
-	if level > 1 && (stillAscending != ascending) {
-		return false, stillAscending
+	if !isCurrAscending {
+		return false
 	}
 
-	return true, stillAscending
+	return true
 }
 
-func getLevels(levelsString string) ([]int, error) {
+func getLevels(levelsString string) ([]int, bool, error) {
 	if levelsString == "" {
-		return []int{}, errors.New("Input string must not be empty")
+		return []int{}, false, errors.New("Input string must not be empty")
 	}
 
+	asc := 0
 	levelsChars := strings.Split(levelsString, " ")
 	levels := make([]int, len(levelsChars))
 
 	for idx, levelChar := range levelsChars {
 		levelAsInt, err := strconv.Atoi(levelChar)
 		if err != nil {
-			return []int{}, err
+			return []int{}, false, err
 		}
 		levels[idx] = levelAsInt
+
+		if idx > 0 {
+			if levels[idx-1] < levels[idx] {
+				asc++
+			} else {
+				asc--
+			}
+		}
 	}
 
-	return levels, nil
+	return levels, asc >= 0, nil
 }
 
 func getLevelsWithIgnoredLevel(levels []int, ignoreLevel int) []int {
