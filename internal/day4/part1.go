@@ -2,7 +2,6 @@ package day4
 
 import (
 	"aoc-2024/pkg/utils"
-	"fmt"
 	"strings"
 )
 
@@ -25,11 +24,18 @@ func Day4Part1(data string) any {
 	puzzleWidth := strings.Index(data, "\n")
 	puzzleHeight := strings.Count(data, "\n")
 
-	fmt.Printf("Puzzle width: %d\nPuzzle height: %d\n", puzzleWidth, puzzleHeight)
+	dataAsBytes := []byte(strings.ReplaceAll(data, "\n", ""))
+	founds := 0
 
-	rotatedPuzzle, _ := getPuzzleRotated([]byte(strings.ReplaceAll(data, "\n", "")), diagonalTopLeft, puzzleWidth, puzzleHeight)
+	for _, direction := range []Direction{horizontal, horizontalReversed, vertical, verticalReversed, diagonalTopLeft, diagonalTopLeftReversed, diagonalTopRight, diagonalTopRightReversed} {
+		rotatedPuzzle, searchString := getPuzzleRotated(dataAsBytes, direction, puzzleWidth, puzzleHeight)
 
-	return strings.Join(rotatedPuzzle, "\n")
+		for _, line := range rotatedPuzzle {
+			founds += strings.Count(line, searchString)
+		}
+	}
+
+	return founds
 }
 
 func getPuzzleRotated(data []byte, direction Direction, puzzleWidth int, puzzleHeight int) ([]string, string) {
