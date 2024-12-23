@@ -1,13 +1,12 @@
 package day1
 
 import (
-	"fmt"
 	"log"
 	"strconv"
 	"strings"
 )
 
-func Day1Part2(data string) {
+func Day1Part2(data string) any {
 	content := strings.Split(data, "\n")
 	arrSize := len(content)
 	left := make([]int, arrSize)
@@ -51,5 +50,5 @@ func Day1Part2(data string) {
 		sum += leftVal * rightCount
 	}
 
-	fmt.Println(sum)
+	return sum
 }

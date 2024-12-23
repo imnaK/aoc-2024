@@ -3,13 +3,12 @@ package day2
 import (
 	"aoc-2024/pkg/utils"
 	"errors"
-	"fmt"
 	"log"
 	"strconv"
 	"strings"
 )
 
-func Day2Part2(data string) {
+func Day2Part2(data string) any {
 	content := strings.Split(data, "\n")
 	safeReports := 0
 
@@ -50,7 +49,7 @@ func Day2Part2(data string) {
 		}
 	}
 
-	fmt.Println(safeReports)
+	return safeReports
 }
 
 func getLevels(levelsString string) ([]int, bool, error) {

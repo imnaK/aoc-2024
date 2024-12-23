@@ -5,7 +5,7 @@ import (
 	"regexp"
 )
 
-func Day3Part2(data string) {
+func Day3Part2(data string) any {
 	impossibleMuls := regexp.MustCompile(`don't\(\)(.|\r|\n)*?(do\(\)|$)`)
 	validMuls := regexp.MustCompile(`mul\(\d+,\d+\)`)
 	sum := 0
@@ -21,5 +21,5 @@ func Day3Part2(data string) {
 		sum += parsedStmt
 	}
 
-	fmt.Println(sum)
+	return sum
 }

@@ -11,7 +11,7 @@ import (
 	"runtime"
 )
 
-type dayPartRunFunction func(string)
+type dayPartRunFunction func(string) any
 
 func main() {
 	args := os.Args
@@ -30,11 +30,17 @@ func main() {
 
 	day := args[1]
 	part := args[2]
+	funcCallKey := fmt.Sprintf("%s%s", day, part)
 
-	dayPartMap[fmt.Sprintf("%s%s", day, part)](getDataFromFile(day))
+	if funcCall, ok := dayPartMap[funcCallKey]; ok {
+		res := funcCall(getDataFromDayFile(day))
+		fmt.Printf("Day %s | Part %s\n%v\n", day, part, res)
+	} else {
+		fmt.Println(fmt.Errorf("Day %v part %v does not exist.", day, part))
+	}
 }
 
-func getDataFromFile(day string) string {
+func getDataFromDayFile(day string) string {
 	// get project root
 	_, filename, _, _ := runtime.Caller(0)
 	porjectRoot := filepath.Dir(filepath.Dir(filename))

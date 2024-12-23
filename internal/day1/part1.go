@@ -2,14 +2,13 @@ package day1
 
 import (
 	"aoc-2024/pkg/utils"
-	"fmt"
 	"log"
 	"sort"
 	"strconv"
 	"strings"
 )
 
-func Day1Part1(data string) {
+func Day1Part1(data string) any {
 	content := strings.Split(data, "\n")
 	arrSize := len(content)
 	left := make([]int, arrSize)
@@ -46,5 +45,5 @@ func Day1Part1(data string) {
 		sums += utils.GetDiff(left[i], right[i])
 	}
 
-	fmt.Println(sums)
+	return sums
 }

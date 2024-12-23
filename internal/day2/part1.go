@@ -2,13 +2,12 @@ package day2
 
 import (
 	"aoc-2024/pkg/utils"
-	"fmt"
 	"log"
 	"strconv"
 	"strings"
 )
 
-func Day2Part1(data string) {
+func Day2Part1(data string) any {
 	content := strings.Split(data, "\n")
 	passed := 0
 
@@ -62,5 +61,5 @@ func Day2Part1(data string) {
 		}
 	}
 
-	fmt.Println(passed)
+	return passed
 }
