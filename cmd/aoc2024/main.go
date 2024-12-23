@@ -4,6 +4,7 @@ import (
 	"aoc-2024/internal/day1"
 	"aoc-2024/internal/day2"
 	"aoc-2024/internal/day3"
+	"aoc-2024/internal/day4"
 	"fmt"
 	"log"
 	"os"
@@ -26,6 +27,8 @@ func main() {
 		"22": day2.Day2Part2,
 		"31": day3.Day3Part1,
 		"32": day3.Day3Part2,
+		"41": day4.Day4Part1,
+		"42": day4.Day4Part2,
 	}
 
 	day := args[1]
