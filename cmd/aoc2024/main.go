@@ -10,6 +10,7 @@ import (
 	"os"
 	"path/filepath"
 	"runtime"
+	"strings"
 )
 
 type dayPartRunFunction func(string) any
@@ -31,25 +32,33 @@ func main() {
 		"42": day4.Day4Part2,
 	}
 
+	// parse arguments
 	day := args[1]
 	part := args[2]
+	isExample := len(args) >= 4 && (args[3] == "1" || strings.ToLower(args[3]) == "true")
 	funcCallKey := fmt.Sprintf("%s%s", day, part)
 
+	// try to call function by day-part, if not print error
 	if funcCall, ok := dayPartMap[funcCallKey]; ok {
-		res := funcCall(getDataFromDayFile(day))
+		res := funcCall(getDataFromDayFile(day, isExample))
 		fmt.Printf("Day %s | Part %s\n%v\n", day, part, res)
 	} else {
 		fmt.Println(fmt.Errorf("Day %v part %v does not exist.", day, part))
 	}
 }
 
-func getDataFromDayFile(day string) string {
+func getDataFromDayFile(day string, isExample bool) string {
 	// get project root
 	_, filename, _, _ := runtime.Caller(0)
 	porjectRoot := filepath.Dir(filepath.Dir(filename))
 
 	// construct filePath
-	fileName := fmt.Sprintf("day-%s.txt", day)
+	var fileName string
+	if isExample {
+		fileName = fmt.Sprintf("day-%s-example.txt", day)
+	} else {
+		fileName = fmt.Sprintf("day-%s.txt", day)
+	}
 	filePath := filepath.Join(porjectRoot, "../inputs", fileName)
 
 	data, err := os.ReadFile(filePath)
