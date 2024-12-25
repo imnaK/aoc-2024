@@ -1,6 +1,7 @@
 package day4
 
 import (
+	"aoc-2024/pkg/datastructures"
 	"aoc-2024/pkg/utils"
 	"strings"
 )
@@ -21,6 +22,10 @@ const (
 const xmas string = "XMAS"
 
 func Day4Part1(data string) any {
+	return solve(data)
+}
+
+func solve(data string) any {
 	puzzleWidth := strings.Index(data, "\n")
 	puzzleHeight := strings.Count(data, "\n")
 
@@ -145,4 +150,48 @@ func getPuzzleRotated(data []byte, direction Direction, puzzleWidth int, puzzleH
 	}
 
 	return rotatedData, string(searchString)
+}
+
+func getFoundWords(data string, words []string) any {
+	board := utils.RemoveEmpty(strings.Split(data, "\n"))
+
+	trie := datastructures.NewTrie()
+	for _, word := range words {
+		trie.Insert(word)
+	}
+
+	result := make(map[string]bool)
+	rows, cols := len(board), len(board[0])
+
+	var dfs func(i, j int, node *datastructures.TrieNode, word string)
+	dfs = func(i, j int, node *datastructures.TrieNode, word string) {
+		if i < 0 || i >= rows || j < 0 || j >= cols {
+			return
+		}
+
+		ch := rune(board[i][j])
+		if next, exists := node.Children[ch]; exists {
+			word += string(ch)
+			if next.IsEnd {
+				result[word] = true
+			}
+
+			directions := [][]int{{-1, -1}, {-1, 0}, {-1, 1}, {0, -1}, {0, 1}, {1, -1}, {1, 0}, {1, 1}}
+			for _, dir := range directions {
+				dfs(i+dir[0], j+dir[1], next, word)
+			}
+		}
+	}
+
+	for i := 0; i < rows; i++ {
+		for j := 0; j < cols; j++ {
+			dfs(i, j, trie.Root, "")
+		}
+	}
+
+	foundWords := make([]string, 0, len(result))
+	for word := range result {
+		foundWords = append(foundWords, word)
+	}
+	return foundWords
 }

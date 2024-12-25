@@ -13,3 +13,14 @@ func ReverseArray[T any](s []T) {
 		s[i], s[j] = s[j], s[i]
 	}
 }
+
+func RemoveEmpty[T comparable](slice []T) []T {
+	var result []T
+	var empty T
+	for _, item := range slice {
+		if item != empty {
+			result = append(result, item)
+		}
+	}
+	return result
+}
