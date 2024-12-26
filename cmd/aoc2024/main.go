@@ -5,6 +5,7 @@ import (
 	"aoc-2024/internal/day2"
 	"aoc-2024/internal/day3"
 	"aoc-2024/internal/day4"
+	"aoc-2024/internal/day5"
 	"fmt"
 	"log"
 	"os"
@@ -30,6 +31,8 @@ func main() {
 		"32": day3.Day3Part2,
 		"41": day4.Day4Part1,
 		"42": day4.Day4Part2,
+		"51": day5.Day5Part1,
+		"52": day5.Day5Part2,
 	}
 
 	// parse arguments
