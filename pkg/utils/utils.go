@@ -24,3 +24,17 @@ func RemoveEmpty[T comparable](slice []T) []T {
 	}
 	return result
 }
+
+func ArrayRemove[T any](slice []T, idx int) []T {
+	return append(slice[:idx], slice[idx+1:]...)
+}
+
+func ArrayContains[T comparable](slice []T, value T) bool {
+	for _, elem := range slice {
+		if elem == value {
+			return true
+		}
+	}
+
+	return false
+}
